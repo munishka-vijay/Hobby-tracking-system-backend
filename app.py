@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_mysqldb import MySQL
 from sqlalchemy import text
+from flask_jwt_extended import JWTManager
 
 from utils.config import Config
 from database import db
@@ -20,6 +21,8 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
+
+jwt = JWTManager(app)
 
 @app.route("/",methods=["GET"])
 def greetings():

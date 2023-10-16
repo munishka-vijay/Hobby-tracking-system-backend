@@ -1,14 +1,15 @@
 import bcrypt, jwt
+from flask_bcrypt import check_password_hash
 from datetime import datetime, timedelta
 from .config import Config
 
 
 def create_hashed_password(password):
-    #Salt is a random string used during hashing
+    # Salt is a random string used during hashing
     salt=bcrypt.gensalt()
 
     # Hash password using salt
-    hashed_pwd = bcrypt.hashpw(password.encode("utf-8"),salt)
+    hashed_pwd = bcrypt.hashpw(password.encode("utf-8"), salt)
 
     return hashed_pwd.decode("utf-8")
 
@@ -30,3 +31,6 @@ def generate_jwt_token(user_id, username):
 
     return token
 
+def check_password(password, hashedPassword):
+    print(password, hashedPassword)
+    return check_password_hash(hashedPassword, password)

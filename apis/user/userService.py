@@ -31,3 +31,33 @@ def user_signup(user_info):
         raise Exception(str(err))
     
 
+def user_login(userData):
+    try:
+
+        # Check if user exists
+        userExists = userRepository.find_user_by_username(userData['username'])
+        if not userExists['success']:
+            raise Exception("User does not exist")
+        
+        # Check if password is correct
+        isPasswordCorrect = check_password(userData['password'], userExists['data'].password)
+
+        if not isPasswordCorrect:
+            raise Exception("Incorrect Password")
+        
+        token = generate_jwt_token(userExists['data'].id, userExists['data'].username)
+
+        return {
+            'id': userExists['data'].id,
+            'username': userExists['data'].username,
+            'token':token,
+            'role':userExists['data'].role
+        }
+    
+    except Exception as err:
+        raise Exception(str(err))
+
+
+        
+    
+

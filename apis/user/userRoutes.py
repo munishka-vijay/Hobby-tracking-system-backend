@@ -20,3 +20,19 @@ def signup():
     except Exception as err:
         return str(err)
     
+@user_api.route('/login', methods=['POST'])
+def login():
+    try:
+        userData=request.get_json()
+        userLogin=userService.user_login(userData)
+
+        if 'error' in userLogin:
+            error = userLogin['error']
+            print("Error",error)
+            return jsonify(error), 400
+
+        return jsonify(userLogin), 201
+
+    except Exception as err:
+        return str(err)
+    
