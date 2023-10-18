@@ -1,7 +1,7 @@
-from flask import Flask
+from flask import Flask, request
 from flask_mysqldb import MySQL
 from sqlalchemy import text
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, jwt_required
 
 from utils.config import Config
 from database import db
@@ -15,6 +15,8 @@ def create_app():
     app.register_blueprint(user_api)
     app.register_blueprint(tag_api)
 
+    jwt = JWTManager(app)
+
     return app
 
 app=create_app()
@@ -23,8 +25,6 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
-
-jwt = JWTManager(app)
 
 @app.route("/",methods=["GET"])
 def greetings():
@@ -37,7 +37,6 @@ def test_db():
         return 'Successfully connected to MYSQL DB'
     except Exception as e:
         return f'Failed to connect to the DB - Error: {str(e)}'
-
 
 if __name__=="__main__":
     app.run(debug=True) #We set debug=True so that everytime we make a change, our server restarts by itself

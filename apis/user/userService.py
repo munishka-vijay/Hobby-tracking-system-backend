@@ -1,3 +1,4 @@
+from flask_jwt_extended import create_access_token
 from . import userRepository
 from utils.utils import *
 
@@ -18,7 +19,9 @@ def user_signup(user_info):
         added_user = userRepository.add_user(user_info['username'], user_info['email'], user_info['phone'], hashedPassword, role)
 
         #Generate JWT Token
-        token = generate_jwt_token(added_user.id, added_user.username)
+        # token = generate_jwt_token(added_user.id, added_user.username)
+
+        token = create_access_token(identity=added_user.username)
         
         return {
             'id': added_user.id,
@@ -45,7 +48,9 @@ def user_login(userData):
         if not isPasswordCorrect:
             raise Exception("Incorrect Password")
         
-        token = generate_jwt_token(userExists['data'].id, userExists['data'].username)
+        # token = generate_jwt_token(userExists['data'].id, userExists['data'].username)
+
+        token = create_access_token(identity=userExists['data'].username)
 
         return {
             'id': userExists['data'].id,
