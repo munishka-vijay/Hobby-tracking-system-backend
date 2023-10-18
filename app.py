@@ -6,12 +6,14 @@ from flask_jwt_extended import JWTManager
 from utils.config import Config
 from database import db
 from apis.user.userRoutes import user_api
+from apis.tag.tagRoutes import tag_api
 
 def create_app():
     app = Flask(__name__)
 
     app.config.from_object(Config)
     app.register_blueprint(user_api)
+    app.register_blueprint(tag_api)
 
     return app
 

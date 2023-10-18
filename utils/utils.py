@@ -2,6 +2,7 @@ import bcrypt, jwt
 from flask_bcrypt import check_password_hash
 from datetime import datetime, timedelta
 from .config import Config
+from .errors import ERROR_MESSAGES
 
 
 def create_hashed_password(password):
@@ -49,3 +50,13 @@ def check_jwt_token(token):
 
     # Token is valid
     return True
+
+# def admin_required(fn):
+#     @wraps(fn)
+#     def decorated_function(*args, **kwargs):
+#         if current_user.role != 'admin':
+#             # If the user is not an admin, deny access
+#             # abort(403)  # You can customize the error page for a forbidden request
+#             raise Exception(ERROR_MESSAGES["UNAUTHORIZED"])
+#         return fn(*args, **kwargs)
+#     return decorated_function
