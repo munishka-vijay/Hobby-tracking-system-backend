@@ -50,5 +50,70 @@ def get_hobbies_for_user():
             return ERROR_MESSAGES["HOBBY_NOT_FOUND"]
     except Exception as err:
         return str(err)
+    
+def get_all_hobbies():
+    try:
+        hobbies = hobbyRepository.get_all_hobbies()
+        hobbyList=[]
+        if hobbies:
+            for hobby in hobbies:
+                hobbyList.append(
+                    {
+                        "Hobby Name" : hobby.name,
+                        "User ID" : hobby.user_id,
+                        "Start Date" : str(hobby.start_date),
+                        "Start Time" : str(hobby.start_time)
+                    }
+                )
+            return hobbyList
+        else:
+            return ERROR_MESSAGES["HOBBY_NOT_FOUND"]
+    except Exception as err:
+        return str(err)
+    
+def update(id, hobbyData):
+    try:
+        user_id = get_current_userid_from_token()
+        start_date_obj = datetime.strptime(hobbyData['start_date'], "%Y-%m-%d").date()
+        start_time_obj = datetime.strptime(hobbyData['start_time'], "%H:%M:%S").time()
+        
+        # Check if hobby 
+        hobbyExists = hobbyRepository.find_hobby_by_id(id)
+        if hobbyExists['success'] is True:
+            print(hobbyExists['data'])
+            if hobbyExists['data'].user_id != user_id:
+                return ERROR_MESSAGES["UNAUTHORIZED"]
+        else:
+            return ERROR_MESSAGES["HOBBY_NOT_FOUND"]
+
+        hobby = hobbyRepository.update(id, hobbyData['name'], hobbyData['tag_id'], start_date_obj, start_time_obj, hobbyData['duration'])
+        return {
+            'message': "Hobby Updated Successfully",
+            'Hobby Name': hobby.name,
+            'Hobby Date': str(hobby.start_date),
+            'Hobby Start Time': str(hobby.start_time)
+        }
+    except Exception as err:
+        return str(err)
+        
+
+def delete(id):
+    try:
+        user_id = get_current_userid_from_token()
+        hobby = hobbyRepository.find_hobby_by_id(id)
+
+        if hobby['success'] is True:
+            if hobby['data'].user_id != user_id:
+                return ERROR_MESSAGES["UNAUTHORIZED"]
+        else:
+            return ERROR_MESSAGES["HOBBY_NOT_FOUND"]
+        
+        deletedHobby = hobbyRepository.delete(id)
+        return {
+            "Deleted Hobby Name" : deletedHobby,
+            "message": "Hobby Deleted Successfully"
+        }
+    except Exception as err:
+        return str(err)
 
     
