@@ -84,6 +84,25 @@ def get_current_user_from_token():
 
     return None
 
+def get_current_userid_from_token():
+    token = request.headers.get('Authorization')  # Extract the token from the request headers
+    # Remove the "Bearer " prefix if it's present
+    if token and token.startswith('Bearer '):
+        token = token[len('Bearer '):]
+
+    if token:
+        try:
+            payload = jwt.decode(token, Config.JWT_SECRET_KEY, algorithms=['HS256'])
+            current_user = payload['sub']
+            user_id = get_user_id_by_name(current_user)
+            return user_id
+        except Exception as err:
+            print(err)
+            raise Exception(ERROR_MESSAGES["INVALID_TOKEN"])
+
+    return None
+
+
 def admin_required(fn):
     @wraps(fn)
     def decorated(*args, **kwargs):

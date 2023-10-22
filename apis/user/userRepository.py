@@ -37,6 +37,7 @@ def get_user_role(user_id):
         # Handle the case where the user doesn't exist
         raise Exception(ERROR_MESSAGES["USER_NOT_FOUND"])
     
+    
 # To get role of user    
 def get_user_role_by_name(username):
 
@@ -45,6 +46,18 @@ def get_user_role_by_name(username):
 
     if user:
         return user.role
+    else:
+        # Handle the case where the user doesn't exist
+        raise Exception(ERROR_MESSAGES["USER_NOT_FOUND"])
+    
+# To get role of user    
+def get_user_id_by_name(username):
+
+    # Getting role of the user from user_id
+    user = User.query.filter_by(username=username).first()
+
+    if user:
+        return user.id
     else:
         # Handle the case where the user doesn't exist
         raise Exception(ERROR_MESSAGES["USER_NOT_FOUND"])

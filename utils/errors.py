@@ -14,5 +14,7 @@ ERROR_MESSAGES = {
     "RATE_LIMITED": "Too many requests from this IP, please try again later.",
     "INVALID_TAG": "Tag should only have string characters",
     "INVALID_TAG_UPPERCASE_ERROR": "Tag should start with a capital letter",
-    "TAG_NOT_FOUND": "No Tag Found"
+    "TAG_NOT_FOUND": "No Tag Found",
+    "HOBBY_NOT_FOUND": "No Hobby Found",
+    "HOBBY_ALREADY_EXISTS": "Hobby Already Exists"
 }
